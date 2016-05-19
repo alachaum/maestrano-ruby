@@ -11,8 +11,12 @@ module Maestrano
 
     module ClassMethods
       def [](preset)
-        define_singleton_method(:preset) { preset || 'default' }        
-        self
+        return self unless preset && preset != '' && preset != 'default'
+        klass = self.clone
+        klass_name = self.name
+        klass.define_singleton_method(:name) { klass_name }
+        klass.define_singleton_method(:preset) { preset }
+        klass
       end
 
       def preset
